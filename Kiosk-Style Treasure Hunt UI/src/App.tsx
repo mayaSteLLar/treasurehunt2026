@@ -1167,8 +1167,10 @@ function H2LoungeChallenge({ timerSeconds, onSuccess, onFail }: { timerSeconds: 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-6 max-w-4xl mx-auto">
       <div className="text-center">
-        <div className="font-mono text-[9px] text-[#337DFF] tracking-[0.4em] opacity-70 mb-2">
-          TARGET ARTEFACTS - CLASSIFIED - ROUND {round} OF {totalRounds}
+        <div className="font-mono text-lg tracking-[0.35em] mb-1">
+          <span className="text-[#669EFF]">ROUND </span>
+          <span className="text-[#00FF88] font-bold">{round}</span>
+          <span className="text-[#669EFF]"> OF {totalRounds}</span>
         </div>
         <h3 className="text-xl font-bold text-white tracking-widest">MEMORISE AND RECONSTRUCT</h3>
       </div>
@@ -1180,25 +1182,34 @@ function H2LoungeChallenge({ timerSeconds, onSuccess, onFail }: { timerSeconds: 
       )}
 
       {phase === 'viewing' && (
-        <div className="relative w-full flex gap-4">
-          <img src={images.left} alt="Target 1" className="w-1/2 h-64 object-cover border border-[#337DFF]/40" />
-          <img src={images.right} alt="Target 2" className="w-1/2 h-64 object-cover border border-[#337DFF]/40" />
-          <div
-            className="absolute inset-0 border border-[#FF3333]/60 flex items-end p-3 pointer-events-none"
-            style={{ background: 'linear-gradient(to top, rgba(255,51,51,0.25) 0%, transparent 60%)' }}
-          >
-            <div className="font-mono text-[9px] text-[#FF3333] tracking-widest">
-              SELF-DESTRUCT IN {countdown}s
+        <>
+          {/* Big countdown timer above the images */}
+          <div className="text-center leading-none">
+            <div className="font-digital text-[clamp(5rem,12vh,8rem)] text-[#FF3333] leading-none">
+              {String(countdown).padStart(2, '0')}
             </div>
+          </div>
+
+          {/* Images with red vignette + shrinking progress bar only — no text overlay */}
+          <div className="relative w-full flex gap-4">
+            <img src={images.left} alt="Target 1" className="w-1/2 h-64 object-cover border border-[#337DFF]/40" />
+            <img src={images.right} alt="Target 2" className="w-1/2 h-64 object-cover border border-[#337DFF]/40" />
             <div
-              className="absolute bottom-0 left-0 h-0.5 bg-[#FF3333]"
-              style={{ width: `${(countdown / timerSeconds) * 100}%`, transition: 'width 1s linear' }}
-            />
+              className="absolute inset-0 border border-[#FF3333]/60 pointer-events-none"
+              style={{ background: 'linear-gradient(to top, rgba(255,51,51,0.25) 0%, transparent 60%)' }}
+            >
+              <div
+                className="absolute bottom-0 left-0 h-0.5 bg-[#FF3333]"
+                style={{ width: `${(countdown / timerSeconds) * 100}%`, transition: 'width 1s linear' }}
+              />
+            </div>
           </div>
-          <div className="absolute top-2 right-2 font-digital text-2xl text-[#FF3333] pointer-events-none">
-            {String(countdown).padStart(2, '0')}
+
+          {/* Self-destruct label below the images */}
+          <div className="font-mono text-xs text-[#FF3333] tracking-[0.3em] text-center opacity-70">
+            SELF-DESTRUCT IN {countdown}s
           </div>
-        </div>
+        </>
       )}
 
       {phase === 'input' && (
@@ -1248,15 +1259,34 @@ function H2LoungeChallenge({ timerSeconds, onSuccess, onFail }: { timerSeconds: 
       )}
 
       {(phase === 'roundResult' || phase === 'final') && (
-        <div className="w-full space-y-6">
-          <div className="flex gap-4">
-            <div className="w-1/2 space-y-2 text-center">
-              <div className="font-mono text-[9px] text-[#00FF88] tracking-widest">RECONSTRUCTION ALPHA</div>
-              <img src={generated.left} alt="Generated 1" className="w-full h-64 object-cover border border-[#00FF88]/40" />
+        <div className="w-full space-y-4">
+          {/* Image Alpha: Original vs Reconstruction */}
+          <div className="flex gap-3">
+            <div className="flex-1 space-y-1 text-center">
+              <div className="font-mono text-[9px] text-[#669EFF] tracking-widest opacity-70">ORIGINAL ALPHA</div>
+              <img src={images.left} alt="Original 1" className="w-full h-48 object-cover border border-[#337DFF]/40" />
             </div>
-            <div className="w-1/2 space-y-2 text-center">
+            <div className="flex items-center px-1 opacity-30">
+              <div className="font-mono text-[#337DFF] text-lg">→</div>
+            </div>
+            <div className="flex-1 space-y-1 text-center">
+              <div className="font-mono text-[9px] text-[#00FF88] tracking-widest">RECONSTRUCTION ALPHA</div>
+              <img src={generated.left} alt="Generated 1" className="w-full h-48 object-cover border border-[#00FF88]/40" />
+            </div>
+          </div>
+
+          {/* Image Beta: Original vs Reconstruction */}
+          <div className="flex gap-3">
+            <div className="flex-1 space-y-1 text-center">
+              <div className="font-mono text-[9px] text-[#669EFF] tracking-widest opacity-70">ORIGINAL BETA</div>
+              <img src={images.right} alt="Original 2" className="w-full h-48 object-cover border border-[#337DFF]/40" />
+            </div>
+            <div className="flex items-center px-1 opacity-30">
+              <div className="font-mono text-[#337DFF] text-lg">→</div>
+            </div>
+            <div className="flex-1 space-y-1 text-center">
               <div className="font-mono text-[9px] text-[#00FF88] tracking-widest">RECONSTRUCTION BETA</div>
-              <img src={generated.right} alt="Generated 2" className="w-full h-64 object-cover border border-[#00FF88]/40" />
+              <img src={generated.right} alt="Generated 2" className="w-full h-48 object-cover border border-[#00FF88]/40" />
             </div>
           </div>
 
